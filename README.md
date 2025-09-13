@@ -126,7 +126,6 @@ The application follows modern design principles with:
 - **Database Integration**: Persistent storage for user accounts and scenarios
 - **Social Features**: Share and compare results with friends
 - **Advanced AI**: More sophisticated lifestyle analysis and recommendations
-- **Wearable Integration**: Import real health data from fitness trackers
 - **Gamification**: Achievement system and progress rewards
 - **Expert Insights**: Integration with health and financial professionals
 
@@ -149,13 +148,6 @@ The app tracks user engagement through:
 ## 📄 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 🙏 Acknowledgments
-
-- Health data based on research from WHO and CDC
-- Climate data from EPA and environmental research organizations
-- Financial calculations based on historical market data
-- UI inspiration from modern design systems and Aceternity UI
 
 ---
 
