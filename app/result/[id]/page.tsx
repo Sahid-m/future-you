@@ -1,14 +1,14 @@
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { memoryStore } from "@/lib/memory-store"
+import { dbStore } from "@/lib/memory-store"
 import { ArrowLeft, BookOpen, DollarSign, Heart, Leaf } from "lucide-react"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 
-export default function SharedResultsPage({ params }: { params: { id: string } }) {
+export default async function SharedResultsPage({ params }: { params: { id: string } }) {
 
-  console.log(memoryStore.getAllSharedResult());
-  const sharedResult = memoryStore.getSharedResult(params.id)
+  console.log(dbStore.getAllSharedResult());
+  const sharedResult = await dbStore.getSharedResult(params.id)
 
   if (!sharedResult) {
     notFound()

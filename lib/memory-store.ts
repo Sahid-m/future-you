@@ -1,65 +1,59 @@
-// In-memory storage for shared results and scenarios
-export type SharedResult = {
-  id: string;
-  inputs: any;
-  results: any;
-  aiStory?: string;
-  createdAt: Date;
-};
+// lib/store.ts
+import { prisma } from "@/lib/db";
 
-export type SavedScenario = {
-  id: string;
-  name: string;
-  inputs: any;
-  results: any;
-  aiStory?: string;
-  createdAt: Date;
-};
-
-// In-memory stores
-const sharedResults = new Map<string, SharedResult>();
-const savedScenarios = new Map<string, SavedScenario>();
-
-export const memoryStore = {
-  // Shared results functions
-  saveSharedResult: (data: Omit<SharedResult, "id" | "createdAt">): string => {
-    const id = Math.random().toString(36).substring(2, 15);
-    const result: SharedResult = {
-      ...data,
-      id,
-      createdAt: new Date(),
-    };
-    sharedResults.set(id, result);
-    return id;
+export const dbStore = {
+  // Shared results
+  saveSharedResult: async (data: {
+    inputs: any;
+    results: any;
+    aiStory?: string;
+  }): Promise<string> => {
+    const result = await prisma.sharedResult.create({
+      data: {
+        inputs: data.inputs,
+        results: data.results,
+        aiStory: data.aiStory,
+      },
+    });
+    return result.id;
   },
 
-  getSharedResult: (id: string): SharedResult | null => {
-    return sharedResults.get(id) || null;
+  getSharedResult: async (id: string) => {
+    return prisma.sharedResult.findUnique({ where: { id } });
   },
 
-  getAllSharedResult: () => {
-    return sharedResults;
+  getAllSharedResult: async () => {
+    return prisma.sharedResult.findMany({
+      orderBy: { createdAt: "desc" },
+    });
   },
 
-  // Saved scenarios functions
-  saveScenario: (data: Omit<SavedScenario, "id" | "createdAt">): string => {
-    const id = Math.random().toString(36).substring(2, 15);
-    const scenario: SavedScenario = {
-      ...data,
-      id,
-      createdAt: new Date(),
-    };
-    savedScenarios.set(id, scenario);
-    return id;
+  // Saved scenarios
+  saveScenario: async (data: {
+    name: string;
+    inputs: any;
+    results: any;
+    aiStory?: string;
+  }): Promise<string> => {
+    const scenario = await prisma.savedScenario.create({
+      data: {
+        name: data.name,
+        inputs: data.inputs,
+        results: data.results,
+        aiStory: data.aiStory,
+      },
+    });
+    return scenario.id;
   },
 
-  getAllScenarios: (): SavedScenario[] => {
-    return Array.from(savedScenarios.values()).sort(
-      (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
-    );
+  getAllScenarios: async () => {
+    return prisma.savedScenario.findMany({
+      orderBy: { createdAt: "desc" },
+    });
   },
 
-  deleteScenario: (id: string): boolean => {
-    return savedScenarios.delete(id);
+  deleteScenario: async (id: string) => {
+    await prisma.savedScenario.delete({ where: { id } });
+    return true;
   },
 };

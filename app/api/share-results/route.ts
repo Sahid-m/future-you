@@ -1,4 +1,4 @@
-import { memoryStore } from "@/lib/memory-store";
+import { dbStore } from "@/lib/memory-store";
 import { type NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -12,13 +12,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const shareId = memoryStore.saveSharedResult({
+    const shareId = await dbStore.saveSharedResult({
       inputs,
       results,
       aiStory,
     });
 
-    console.log(memoryStore.getAllSharedResult());
+    console.log(dbStore.getAllSharedResult());
 
     const shareUrl = `${request.nextUrl.origin}/result/${shareId}`;
 
